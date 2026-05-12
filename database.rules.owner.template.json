@@ -1,0 +1,44 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "fire": {
+      ".read": false,
+      ".write": false,
+      "users": {
+        "YOUR_FIREBASE_UID_HERE": {
+          ".read": "auth != null && auth.uid === 'YOUR_FIREBASE_UID_HERE'",
+          ".write": "auth != null && auth.uid === 'YOUR_FIREBASE_UID_HERE'",
+          "portfolio": {
+            ".validate": "newData.hasChildren(['livret', 'pea', 'usdt', 'btcEur', 'btcQty', 'savings']) && newData.childrenCount() === 6",
+            "livret": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000" },
+            "pea": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000" },
+            "usdt": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000" },
+            "btcEur": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000" },
+            "btcQty": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 21000000" },
+            "savings": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000" },
+            "$other": { ".validate": false }
+          },
+          "history": {
+            "$entry": {
+              ".validate": "newData.hasChildren(['ts', 'total', 'manual']) && newData.childrenCount() === 3",
+              "ts": { ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 600000" },
+              "total": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000" },
+              "manual": { ".validate": "newData.isBoolean()" },
+              "$other": { ".validate": false }
+            }
+          },
+          "$other": { ".validate": false }
+        },
+        "$other": {
+          ".read": false,
+          ".write": false,
+          ".validate": false
+        }
+      },
+      "portfolio": { ".read": false, ".write": false },
+      "history": { ".read": false, ".write": false },
+      "$other": { ".read": false, ".write": false, ".validate": false }
+    }
+  }
+}

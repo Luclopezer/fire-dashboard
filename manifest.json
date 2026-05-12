@@ -2,7 +2,7 @@
   "name": "FIRE Dashboard",
   "short_name": "FIRE",
   "description": "Suivi patrimoine & indépendance financière",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#080c10",
   "theme_color": "#080c10",
