@@ -1,3 +1,4 @@
+<<<<<<< codex/fix-routing-for-fire-dashboard-lg8ept
 # luclopezer.github.io
 
 Static FIRE dashboard for GitHub Pages.
@@ -40,3 +41,10 @@ La protection des données se fait côté Firebase :
 5. Supprime les anciennes données `fire/portfolio` et `fire/history` si elles existent encore dans Realtime Database.
 
 Avec ces règles, chaque utilisateur authentifié ne peut lire et écrire que son propre chemin `fire/users/<uid>`. Le site peut rester public, mais les données Firebase ne sont plus publiques.
+=======
+# fire-dashboard
+
+Static FIRE dashboard configured to be served from the domain root (`/`).
+
+Deploy the contents of this repository at the web root (for example a GitHub Pages user/organization site, Firebase Hosting public root, Netlify/Vercel root, or a custom domain pointing directly to this static site) so the app is available without the `/fire-dashboard` path.
+>>>>>>> main
