@@ -49,7 +49,7 @@ La protection des données se fait côté Firebase :
 3. Publie les règles `database.rules.json` dans **Realtime Database → Rules**.
 4. Migre ou ressaisis tes données dans l'app après connexion : elles seront enregistrées sous `fire/users/<uid>/...`.
 5. Supprime les anciennes données `fire/portfolio` et `fire/history` si elles existent encore dans Realtime Database.
-
+   
 Avec ces règles, chaque utilisateur authentifié ne peut lire et écrire que son propre chemin `fire/users/<uid>`. Le site peut rester public, mais les données Firebase ne sont plus publiques.
 
 ## Si tu ne vois pas l'écran de login
@@ -63,3 +63,4 @@ Si le dashboard s'affiche directement sans login :
 5. Vérifie que tu as créé ton utilisateur dans **Firebase Authentication → Users** ; le code n'ouvre pas d'inscription publique.
 
 Le service worker force maintenant une vérification de mise à jour au chargement et recharge la page quand une nouvelle version prend le contrôle, afin d'éviter de rester bloqué sur une ancienne version sans login.
+

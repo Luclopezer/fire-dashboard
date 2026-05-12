@@ -3,6 +3,8 @@
 
 const CACHE_NAME = 'fire-v4';
 const BASE_URL = new URL(self.registration.scope);
+const CACHE_NAME = 'fire-v3';
+const BASE_URL = new URL(self.registration.scope);
 
 // Fichiers à mettre en cache au démarrage.
 // Les URL sont résolues depuis le scope du service worker pour fonctionner
@@ -14,6 +16,7 @@ const PRECACHE = [
   './icon-192.png',
   './icon-512.png'
 ].map(path => new URL(path, BASE_URL).toString());
+
 
 // ── INSTALLATION : mise en cache initiale ──────────────
 self.addEventListener('install', event => {
