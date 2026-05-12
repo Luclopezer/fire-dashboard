@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "fire": {
+      "users": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid"
+        }
+      },
+      "portfolio": {
+        ".read": false,
+        ".write": false
+      },
+      "history": {
+        ".read": false,
+        ".write": false
+      }
+    }
+  }
+}

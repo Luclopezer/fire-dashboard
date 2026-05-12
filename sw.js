@@ -1,14 +1,19 @@
 // sw.js — Service Worker FIRE Dashboard
 // Met en cache l'app pour un accès hors-ligne
 
-const CACHE_NAME = 'fire-v1';
+const CACHE_NAME = 'fire-v3';
+const BASE_URL = new URL(self.registration.scope);
 
-// Fichiers à mettre en cache au démarrage
+// Fichiers à mettre en cache au démarrage.
+// Les URL sont résolues depuis le scope du service worker pour fonctionner
+// aussi bien sur /fire-dashboard/ que sur /.
 const PRECACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json'
-];
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
+].map(path => new URL(path, BASE_URL).toString());
 
 // ── INSTALLATION : mise en cache initiale ──────────────
 self.addEventListener('install', event => {
