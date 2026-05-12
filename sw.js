@@ -1,13 +1,15 @@
 // sw.js — Service Worker FIRE Dashboard
 // Met en cache l'app pour un accès hors-ligne
 
-const CACHE_NAME = 'fire-v1';
+const CACHE_NAME = 'fire-v2';
 
 // Fichiers à mettre en cache au démarrage
 const PRECACHE = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 // ── INSTALLATION : mise en cache initiale ──────────────
