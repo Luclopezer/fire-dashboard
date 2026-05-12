@@ -1,4 +1,3 @@
-<<<<<<< codex/fix-routing-for-fire-dashboard-lg8ept
 # luclopezer.github.io
 
 Static FIRE dashboard for GitHub Pages.
@@ -28,9 +27,20 @@ https://luclopezer.github.io/fire-dashboard/
 
 The app uses relative PWA asset paths so the same files can work from either `/` or `/fire-dashboard/` depending on where GitHub Pages publishes them.
 
-## Sécuriser les données sensibles
+## Sécurisation
 
-Le code HTML/CSS/JavaScript d'un site GitHub Pages reste public par nature. Il ne faut donc jamais y mettre un secret privé, un mot de passe en dur ou une clé API serveur.
+Le plan complet est dans [`docs/security-roadmap.md`](docs/security-roadmap.md).
+
+À retenir :
+
+1. Un repo privé réduit l'exposition du code GitHub, mais le JavaScript envoyé au navigateur reste inspectable.
+2. Les données doivent être protégées côté backend, pas seulement avec un écran de login.
+3. Les règles Firebase renforcées sont dans `database.rules.json`.
+4. Une variante encore plus stricte, limitée à un seul UID Firebase, est disponible dans `database.rules.owner.template.json`.
+5. Un script de départ Supabase est disponible dans `supabase/fire-dashboard-schema.sql`.
+6. Un exemple d'API Vercel sécurisée par Firebase Admin est disponible dans `vercel/api/dashboard.js`.
+
+## Sécuriser les données sensibles avec Firebase
 
 La protection des données se fait côté Firebase :
 
@@ -39,12 +49,18 @@ La protection des données se fait côté Firebase :
 3. Publie les règles `database.rules.json` dans **Realtime Database → Rules**.
 4. Migre ou ressaisis tes données dans l'app après connexion : elles seront enregistrées sous `fire/users/<uid>/...`.
 5. Supprime les anciennes données `fire/portfolio` et `fire/history` si elles existent encore dans Realtime Database.
-
+   
 Avec ces règles, chaque utilisateur authentifié ne peut lire et écrire que son propre chemin `fire/users/<uid>`. Le site peut rester public, mais les données Firebase ne sont plus publiques.
-=======
-# fire-dashboard
 
-Static FIRE dashboard configured to be served from the domain root (`/`).
+## Si tu ne vois pas l'écran de login
 
-Deploy the contents of this repository at the web root (for example a GitHub Pages user/organization site, Firebase Hosting public root, Netlify/Vercel root, or a custom domain pointing directly to this static site) so the app is available without the `/fire-dashboard` path.
->>>>>>> main
+Si le dashboard s'affiche directement sans login :
+
+1. Tu es peut-être déjà connecté dans ce navigateur : clique sur **Déconnexion** pour vérifier que l'écran `FIRE privé` revient.
+2. Ton navigateur peut avoir gardé l'ancienne PWA en cache : fais un rechargement forcé (`Ctrl` + `Shift` + `R`) ou supprime les données du site dans les DevTools.
+3. Sur mobile, ferme l'app PWA installée puis rouvre-la, ou désinstalle/réinstalle le raccourci après le nouveau déploiement.
+4. Vérifie que GitHub Pages a fini de redéployer la branche `main`.
+5. Vérifie que tu as créé ton utilisateur dans **Firebase Authentication → Users** ; le code n'ouvre pas d'inscription publique.
+
+Le service worker force maintenant une vérification de mise à jour au chargement et recharge la page quand une nouvelle version prend le contrôle, afin d'éviter de rester bloqué sur une ancienne version sans login.
+

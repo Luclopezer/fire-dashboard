@@ -6,9 +6,9 @@
       ".read": false,
       ".write": false,
       "users": {
-        "$uid": {
-          ".read": "auth != null && auth.uid === $uid",
-          ".write": "auth != null && auth.uid === $uid",
+        "YOUR_FIREBASE_UID_HERE": {
+          ".read": "auth != null && auth.uid === 'YOUR_FIREBASE_UID_HERE'",
+          ".write": "auth != null && auth.uid === 'YOUR_FIREBASE_UID_HERE'",
           "portfolio": {
             ".validate": "newData.hasChildren(['livret', 'pea', 'usdt', 'btcEur', 'btcQty', 'savings']) && newData.childrenCount() === 6",
             "livret": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000" },
@@ -29,21 +29,16 @@
             }
           },
           "$other": { ".validate": false }
+        },
+        "$other": {
+          ".read": false,
+          ".write": false,
+          ".validate": false
         }
       },
-      "portfolio": {
-        ".read": false,
-        ".write": false
-      },
-      "history": {
-        ".read": false,
-        ".write": false
-      },
-      "$other": {
-        ".read": false,
-        ".write": false,
-        ".validate": false
-      }
+      "portfolio": { ".read": false, ".write": false },
+      "history": { ".read": false, ".write": false },
+      "$other": { ".read": false, ".write": false, ".validate": false }
     }
   }
 }

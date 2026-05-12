@@ -1,0 +1,11 @@
+{
+  "name": "fire-dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "python3 -m json.tool manifest.json >/tmp/manifest.valid && python3 -m json.tool database.rules.json >/tmp/database-rules.valid && python3 -m json.tool database.rules.owner.template.json >/tmp/database-owner-rules.valid"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}
