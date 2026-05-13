@@ -585,6 +585,8 @@ tr:last-child td{border-bottom:none}
         <div class="m-field"><span class="m-field-label">BTC investi</span><input type="number" id="m-i-btceur" inputmode="decimal" placeholder="1000"><span class="m-field-unit">€</span></div>
         <div class="m-field"><span class="m-field-label">BTC accumulé</span><input type="number" id="m-i-btcqty" inputmode="decimal" placeholder="0.012" step="0.0001"><span class="m-field-unit">BTC</span></div>
         <div class="m-form-stitle">Budget</div>
+        <div class="m-field"><span class="m-field-label">Revenu net/mois</span><input type="number" id="m-i-income" inputmode="decimal" placeholder="2500"><span class="m-field-unit">€</span></div>
+        <div class="m-field"><span class="m-field-label">Dépenses fixes</span><input type="number" id="m-i-expenses" inputmode="decimal" placeholder="800"><span class="m-field-unit">€</span></div>
         <div class="m-field"><span class="m-field-label">Épargne/mois</span><input type="number" id="m-i-savings" inputmode="decimal" placeholder="1500"><span class="m-field-unit">€</span></div>
         <button class="m-btn-save init" onclick="saveAndSync()">🚀 Initialiser mon patrimoine</button>
       </div>
@@ -811,6 +813,8 @@ tr:last-child td{border-bottom:none}
           <div class="d-form-group"><label>PEA SP500 — valeur actuelle (€)</label><input type="number" id="d-input-pea" placeholder="ex: 8000"></div>
           <div class="d-form-group"><label>BTC investi — montant € (€)</label><input type="number" id="d-input-btc-eur" placeholder="ex: 1000"></div>
           <div class="d-form-group"><label>BTC accumulé — quantité</label><input type="number" id="d-input-btc-qty" placeholder="ex: 0.012" step="0.0001"></div>
+          <div class="d-form-group"><label>Revenu net mensuel (€)</label><input type="number" id="d-input-income" placeholder="2500"></div>
+          <div class="d-form-group"><label>Dépenses fixes (€)</label><input type="number" id="d-input-expenses" placeholder="800"></div>
           <div class="d-form-group"><label>Épargne mensuelle (€)</label><input type="number" id="d-input-savings" placeholder="ex: 1500"></div>
         </div>
         <button class="d-btn init-mode" onclick="saveAndSync()">🚀 Initialiser mon patrimoine</button>
@@ -847,7 +851,7 @@ const MODE_KEY    = 'fire_legacy_mode';
 const FIRE_TARGET = 900000;
 const COLORS      = ['#00d4aa','#f7931a','#627eea','#00b4d8'];
 
-const DEFAULT = { livret:0, pea:0, usdt:0, btcEur:0, btcQty:0, savings:0 };
+const DEFAULT = { livret:0, pea:0, usdt:0, btcEur:0, btcQty:0, savings:0, income:2500, expenses:800 };
 
 let data      = loadLocal();
 let history   = loadHistory();
@@ -924,6 +928,10 @@ function switchToInit() {
   ['m-i-livret','m-i-pea','m-i-usdt','m-i-btceur','m-i-btcqty','m-i-savings'].forEach((id,i)=>{
     const keys=['livret','pea','usdt','btcEur','btcQty','savings'];
     const el=document.getElementById(id); if(el) el.value=data[keys[i]]||'';
+    const el_income = document.getElementById('m-i-income');
+    if(el_income) el_income.value = data.income||'';
+    const el_exp = document.getElementById('m-i-expenses');
+    if(el_exp) el_exp.value = data.expenses||'';
   });
   // Desktop
   document.getElementById('d-input-livret').value=data.livret||'';
@@ -932,6 +940,8 @@ function switchToInit() {
   document.getElementById('d-input-btc-eur').value=data.btcEur||'';
   document.getElementById('d-input-btc-qty').value=data.btcQty||'';
   document.getElementById('d-input-savings').value=data.savings||'';
+  document.getElementById('d-input-income').value = data.income||'';
+  document.getElementById('d-input-expenses').value = data.expenses||'';
 }
 
 function resetMonthlyInputs() {
@@ -1166,8 +1176,10 @@ function render() {
   const total=data.livret+data.pea+data.usdt+btcLive;
   const firePct=Math.min((total/FIRE_TARGET)*100,100);
   const fireYears=yearsToFIRE(total,data.savings,FIRE_TARGET,.08);
-  const income=2500,expenses=800,reste=income-expenses-data.savings;
-  const rate=data.savings>0?Math.round((data.savings/income)*100):0;
+const income=data.income||2500;
+const expenses=data.expenses||800;
+const reste=income-expenses-data.savings;
+const rate=income>0?Math.round((data.savings/income)*100):0;
   const segs=[
     {label:'Livret A',sublabel:'Apport RP + urgence',v:data.livret,color:COLORS[0]},
     {label:'PEA',sublabel:'Long terme FIRE',v:data.pea,color:COLORS[2]},
@@ -1259,6 +1271,8 @@ function saveAndSync() {
     if(g('i-btceur')!==null||gd('input-btc-eur')!==null) data.btcEur=g('i-btceur')??gd('input-btc-eur');
     if(g('i-btcqty')!==null||gd('input-btc-qty')!==null) data.btcQty=g('i-btcqty')??gd('input-btc-qty');
     if(g('i-savings')!==null||gd('input-savings')!==null) data.savings=g('i-savings')??gd('input-savings');
+    if(g('i-income')!==null||gd('input-income')!==null) data.income=g('i-income')??gd('input-income')??2500;
+    if(g('i-expenses')!==null||gd('input-expenses')!==null) data.expenses=g('i-expenses')??gd('input-expenses')??800;
     applyMode('monthly'); saveMode('monthly');
   } else {
     const gm=id=>{ const v=parseFloat(document.getElementById('m-'+id)?.value);return isNaN(v)||v<0?0:v; };
