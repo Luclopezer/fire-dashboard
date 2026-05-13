@@ -1307,13 +1307,6 @@ function saveAndSync() {
   if(di){ di.textContent=fbEnabled?'☁️ Synchronisé sur tous tes appareils':'💾 Sauvegardé localement'; di.style.color='var(--accent)'; setTimeout(()=>{di.textContent='💾 Sauvegarde auto active';di.style.color='var(--muted)';},2500); }
 }
 
-function resetData() {
-  if(confirm('⚠️ Réinitialiser toutes les données ?')){
-    [STORAGE_KEY,HISTORY_KEY,MODE_KEY].forEach(k=>localStorage.removeItem(k));
-    data={...DEFAULT}; history=[];
-    if(fbEnabled&&window._fbSave){ window._fbSave(data); window._fbSaveHistory([]); }
-    applyMode('init'); render(); drawChart(mCurrentTf,'m'); drawChart(dCurrentTf,'d');
-  }
 }
 
 // ── TAB SWITCH MOBILE ──────────────────────────────────
