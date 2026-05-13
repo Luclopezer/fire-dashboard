@@ -1054,7 +1054,9 @@ function recordHistoryLive(total) {
   if(last&&now-last.ts<5*60*1000) return;
   history.push({ts:now,total,manual:false});
   if(history.length>2000) history=history.slice(-2000);
-  saveHistory(); drawChart(mCurrentTf,'m'); drawChart(dCurrentTf,'d');
+  saveHistory();
+  if(fbEnabled && window._fbSaveHistory) window._fbSaveHistory(history);
+  drawChart(mCurrentTf,'m'); drawChart(dCurrentTf,'d');
 }
 function getFiltered(tf) {
   const now=Date.now();
