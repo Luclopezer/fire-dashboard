@@ -1015,39 +1015,35 @@ async function fetchSP500() {
 async function fetchPrices() {
   await Promise.all([fetchBTC(), fetchSP500()]);
   const now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-  // Mobile
-  if(prices.btcEur){
-    document.getElementById('m-btc-price').textContent=prices.btcEur.toLocaleString('fr-FR',{maximumFractionDigits:0})+' €';
-    const chg=prices.btcChange||0; const el=document.getElementById('m-btc-chg');
-    el.textContent=(chg>=0?'▲ +':'▼ ')+Math.abs(chg).toFixed(2)+'%'; el.className='m-price-chg '+(chg>=0?'pos':'neg');
-    document.getElementById('m-btc-time').textContent='Màj '+now;
-  } else { document.getElementById('m-btc-price').textContent='Indispo.'; }
-  if(prices.sp500){
-    document.getElementById('m-sp-price').textContent=prices.sp500.toLocaleString('fr-FR',{maximumFractionDigits:0});
-    const chg=prices.sp500Change||0; const el=document.getElementById('m-sp-chg');
-    el.textContent=(chg>=0?'▲ +':'▼ ')+Math.abs(chg).toFixed(2)+'%'; el.className='m-price-chg '+(chg>=0?'pos':'neg');
-    document.getElementById('m-sp-time').textContent='Màj '+now;
-  } else { document.getElementById('m-sp-price').textContent='Marché fermé'; }
-  // Desktop
-  if(prices.btcEur){
-    document.getElementById('d-btc-price').textContent=prices.btcEur.toLocaleString('fr-FR',{maximumFractionDigits:0})+' €';
-    const chg=prices.btcChange||0; const el=document.getElementById('d-btc-change');
-    el.textContent=(chg>=0?'▲ +':'▼ ')+Math.abs(chg).toFixed(2)+'% (24h)'; el.className='d-price-ticker-chg '+(chg>=0?'pos':'neg');
-    document.getElementById('d-btc-time').textContent='Màj '+now;
-  } else { document.getElementById('d-btc-price').textContent='Indisponible'; }
-  if(prices.sp500){
-    document.getElementById('d-sp500-price').textContent=prices.sp500.toLocaleString('fr-FR',{maximumFractionDigits:0})+' pts';
-    const chg=prices.sp500Change||0; const el=document.getElementById('d-sp500-change');
-    el.textContent=(chg>=0?'▲ +':'▼ ')+Math.abs(chg).toFixed(2)+'%'; el.className='d-price-ticker-chg '+(chg>=0?'pos':'neg');
-    document.getElementById('d-sp500-time').textContent='Màj '+now;
-  } else { document.getElementById('d-sp500-price').textContent='Marché fermé'; }
+  function updatePriceDisplay(prefix, btcPrice, btcChange, sp500Price, sp500Change, time) {
+  const p = prefix; // raccourci
+  
+  if(btcPrice) {
+    document.getElementById(p+'-btc-price').textContent = btcPrice.toLocaleString('fr-FR',{maximumFractionDigits:0})+' €';
+    const chg = btcChange||0;
+    const el = document.getElementById(p === 'm' ? 'm-btc-chg' : 'd-btc-change');
+    el.textContent = (chg>=0?'▲ +':'▼ ')+Math.abs(chg).toFixed(2)+'%';
+    el.className = (p === 'm' ? 'm-price-chg ' : 'd-price-ticker-chg ') + (chg>=0?'pos':'neg');
+    document.getElementById(p+'-btc-time').textContent = 'Màj '+time;
+  }
+  
+  if(sp500Price) {
+    document.getElementById(p === 'm' ? 'm-sp-price' : 'd-sp500-price').textContent = 
+      sp500Price.toLocaleString('fr-FR',{maximumFractionDigits:0}) + (p === 'd' ? ' pts' : '');
+    const chg = sp500Change||0;
+    const el = document.getElementById(p === 'm' ? 'm-sp-chg' : 'd-sp500-change');
+    el.textContent = (chg>=0?'▲ +':'▼ ')+Math.abs(chg).toFixed(2)+'%';
+    el.className = (p === 'm' ? 'm-price-chg ' : 'd-price-ticker-chg ') + (chg>=0?'pos':'neg');
+    document.getElementById(p+'-sp-time').textContent = 'Màj '+time;
+  }
+}
   // Live BTC record
   if(history.length>0&&data.btcQty>0&&prices.btcEur){
     recordHistoryLive(data.livret+data.pea+data.usdt+data.btcQty*prices.btcEur);
   }
   render();
 }
-fetchPrices(); setInterval(fetchPrices, 60000);
+fetchPrices(); ['m','d'].forEach(p => updatePriceDisplay(p, prices.btcEur, prices.btcChange, prices.sp500, prices.sp500Change, now));
 
 // ── HISTORIQUE ─────────────────────────────────────────
 function recordHistory(total) {
