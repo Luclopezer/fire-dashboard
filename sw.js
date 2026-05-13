@@ -3,12 +3,7 @@
 
 const CACHE_NAME = 'fire-v4';
 const BASE_URL = new URL(self.registration.scope);
-const CACHE_NAME = 'fire-v3';
-const BASE_URL = new URL(self.registration.scope);
 
-// Fichiers à mettre en cache au démarrage.
-// Les URL sont résolues depuis le scope du service worker pour fonctionner
-// aussi bien sur /fire-dashboard/ que sur /.
 const PRECACHE = [
   './',
   './index.html',
